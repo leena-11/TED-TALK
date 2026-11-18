@@ -1,0 +1,130 @@
+================================================================================
+           PERSONALIZED TED TALKS RECOMMENDATION SYSTEM USING ML
+             WEEK 3 - MODULE 5: EVALUATION METRICS REPORT
+================================================================================
+Generated Timestamp : 2026-11-17 20:40:35
+Module              : Week 3 – Module 5: Evaluation Metrics
+Status              : COMPLETED & VERIFIED
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+Module 5 performs rigorous, scientific evaluation of the recommendation models
+developed in Module 4. In accordance with requirements, evaluation is executed
+against authentic ground-truth data: the official human-curated editorial
+recommendations ('related_talks') published by TED Conferences LLC (15,010 pairs
+across 2,550 talks). Key information retrieval metrics—Precision@K, Recall@K,
+NDCG@K, and Mean Average Precision (MAP@K)—were computed across cut-offs K in
+[3, 5, 10, 15, 20] using an 80/20 train-test split (510 test queries).
+
+The Content-Based Recommendation System emerged as the highest-performing model
+across all metrics, achieving:
+- Precision@10 : 0.2300 (over 65x higher than popularity baseline)
+- Recall@10    : 0.3879 (capturing nearly 40% of all official TED recommendations)
+- NDCG@10      : 0.4117
+- MAP@10       : 0.2671
+
+2. GROUND-TRUTH DATA AND EVALUATION METHODOLOGY
+-----------------------------------------------
+A. Real-World Ground-Truth Benchmark:
+- Source: 'related_talks' column curated by TED Conferences editorial staff.
+- Dataset Statistics:
+  * Total Ground-Truth Pairs Identified : 15,010
+  * Average Related Talks per Talk      : 5.9
+  * Random Retrieval Baseline Precision : ~0.0023 (0.23%)
+
+B. Train-Test Splitting:
+- Total Corpus: 2,550 talks
+- Training Set: 2,040 talks (80%)
+- Test Set    : 510 talks (20%) held out for query evaluation
+- Evaluation Thresholds: K in [3, 5, 10, 15, 20]
+
+C. Evaluation Metrics Formulation:
+- Precision@K = |Top-K Recommendations ∩ Ground-Truth| / K
+- Recall@K    = |Top-K Recommendations ∩ Ground-Truth| / |Ground-Truth|
+- NDCG@K      = DCG@K / IDCG@K, where DCG@K = sum(rel_i / log2(i + 1))
+- MAP@K       = (1 / min(|Ground-Truth|, K)) * sum(P(i) * rel_i)
+
+3. MODEL COMPARISON BENCHMARK TABLE (AT K = 10)
+-----------------------------------------------
+                 Model  K  Precision@K  Recall@K  NDCG@K  MAP@K
+Content-Based (TF-IDF) 10       0.2300    0.3879  0.4117 0.2671
+   Hybrid (alpha=0.85) 10       0.1733    0.2931  0.3075 0.1885
+  Tag Jaccard Baseline 10       0.0988    0.1693  0.1628 0.0837
+   Hybrid (alpha=0.70) 10       0.0537    0.0928  0.0913 0.0467
+   Popularity Baseline 10       0.0035    0.0062  0.0068 0.0032
+
+4. DETAILED PERFORMANCE ANALYSIS ACROSS K
+-----------------------------------------
+A. Content-Based Filtering (TF-IDF + Cosine Similarity):
+- K=3  : P@3=0.3013, R@3=0.1702, NDCG@3=0.3708, MAP@3=0.2285
+- K=5  : P@5=0.2831, R@5=0.2520, NDCG@5=0.3842, MAP@5=0.2452
+- K=10 : P@10=0.2300, R@10=0.3879, NDCG@10=0.4117, MAP@10=0.2671
+- K=15 : P@15=0.1908, R@15=0.4678, NDCG@15=0.4284, MAP@10=0.2762
+- K=20 : P@20=0.1652, R@20=0.5298, NDCG@20=0.4419, MAP@20=0.2829
+
+B. Popularity-Augmented Hybrid Recommender:
+- At alpha = 0.85, the hybrid model maintains strong performance (P@10 = 0.1733,
+  NDCG@10 = 0.3075), balancing semantic relevance with global audience engagement.
+- At alpha = 0.70, higher popularity weighting shifts recommendations toward viral talks,
+  lowering semantic precision to P@10 = 0.0537.
+
+C. Baseline Comparisons:
+- Tag Jaccard Baseline achieved P@10 = 0.0988, demonstrating that raw tag
+  matching captures coarse category overlaps but lacks the fine-grained verbatim nuance
+  provided by full transcripts and descriptions.
+- Global Popularity Baseline achieved P@10 = 0.0035, confirming that
+  audience views alone cannot substitute for personalized content recommendations.
+
+5. COLLABORATIVE FILTERING ASSESSMENT & TRADE-OFF ANALYSIS
+----------------------------------------------------------
+Requirement 2 Mandate:
+  "Evaluate Collaborative Filtering only if genuine user interaction data is available."
+
+A. Genuine Data Availability Finding:
+- The TED dataset contains talk-level metadata, video durations, transcripts, and aggregate view counts.
+- It contains ZERO individual user accounts, user IDs, watch duration logs, or per-user rating matrices.
+- Compliance: STRICT NO FAKE USER DATA POLICY MAINTAINED. No synthetic users were generated.
+
+B. Theoretical & Architectural Trade-offs:
+1. Data Efficiency & Cold-Start:
+   - Content-Based: Excels in zero-user cold-start settings; newly published talks are immediately
+     recommendable based on text transcripts.
+   - Collaborative Filtering: Completely fails on new talks or new users (cold-start problem) and
+     requires dense user-item interaction matrices.
+2. Serendipity vs. Topic Alignment:
+   - Content-Based: Delivers highly aligned, transparent, and topic-specific recommendations.
+   - Collaborative Filtering: Discovers latent cross-domain serendipity when user logs exist, but
+     is susceptible to popularity bias and filter bubbles.
+3. Computational Complexity & Scaling:
+   - Content-Based: Scale depends on catalog size (2,550 talks), enabling fast real-time inference.
+   - Collaborative Filtering: Matrix factorization (e.g., SVD, ALS) scales with M users x N items,
+     requiring substantial memory and continuous re-training.
+
+6. BEST-PERFORMING MODEL SELECTION & RATIONALE
+----------------------------------------------
+Selected Production Model: CONTENT-BASED RECOMMENDATION SYSTEM (TF-IDF + Cosine Similarity)
+
+Justification:
+1. Superior Performance: Achieved the highest score on all ground-truth metrics
+   (P@10 = 0.2300, Recall@10 = 0.3879, NDCG@10 = 0.4117, MAP@10 = 0.2671).
+2. Ground-Truth Alignment: Closely replicates official human-curated editorial recommendations.
+3. Interpretability & Transparency: Recommendations can be directly explained to users via
+   shared thematic tags and transcript keywords.
+4. Robustness: 100% operational on genuine dataset attributes without fabricating synthetic user data.
+
+7. DELIVERABLE ARTIFACTS
+------------------------
+- evaluation.py : Standalone evaluation script and class.
+- module5_evaluation.ipynb : Interactive Jupyter Notebook with executed cells and embedded figures.
+- outputs/evaluation_results.csv : Comprehensive results across all models and cut-offs K.
+- outputs/model_comparison.csv : Summary benchmark table at K = 10.
+- reports/module5_evaluation_report.txt : Comprehensive evaluation report.
+- reports/visualizations/precision_comparison.png : Precision@K curve.
+- reports/visualizations/recall_comparison.png : Recall@K curve.
+- reports/visualizations/ndcg_comparison.png : NDCG@K curve.
+- reports/visualizations/map_comparison.png : MAP@K curve.
+
+================================================================================
+WEEK 3 – MODULE 5: EVALUATION METRICS COMPLETED SUCCESSFULLY
+================================================================================

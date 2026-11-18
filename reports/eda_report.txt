@@ -1,0 +1,125 @@
+================================================================================
+           PERSONALIZED TED TALKS RECOMMENDATION SYSTEM USING ML
+             WEEK 1 - MODULE 2: DATA EXPLORATION & PREPROCESSING REPORT
+================================================================================
+Generated Timestamp : 2026-11-17 19:07:26
+Module              : Week 1 – Module 2: Data Exploration and Data Preprocessing
+Status              : COMPLETED & VERIFIED
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+Module 2 performed comprehensive exploratory data analysis (EDA) and data
+preprocessing on the collected TED Talks dataset (2,550 talks). Both 'ted_main.csv'
+and 'transcripts.csv' were thoroughly explored for distribution patterns,
+correlations, and anomalies. Duplicate records were resolved, missing values
+were handled using NLP text imputation, transcripts were fully sanitized
+through lowercase conversion, punctuation removal, whitespace compaction, and
+NLTK stopword removal. Categorical features were encoded for machine learning
+readiness, and publication-quality visualizations were generated.
+
+2. DATASET DIMENSIONS AND AUDIT
+-------------------------------
+- ted_main.csv Shape             : 2,550 rows x 20 columns
+- transcripts.csv Shape (Raw)    : 2,467 rows x 2 columns
+- transcripts.csv (Deduplicated) : 2,464 rows (3 duplicate URL rows removed)
+- Consolidated Shape             : 2,550 rows x 46 columns
+
+3. MISSING VALUE MANAGEMENT
+---------------------------
+- 'speaker_occupation' in ted_main: 6 missing values (0.24%).
+  Resolution: Imputed with 'Unknown' prior to categorical encoding.
+- 'transcript' in merged corpus   : 86 talks (3.37%) lacked spoken transcripts
+  (e.g., musical performances, dance, magic acts).
+  Resolution: Imputed via cleaned title and description ('{title}. {description}'),
+  guaranteeing zero null text entries for recommendation algorithms while
+  preserving the 'has_original_transcript' boolean flag.
+- Remaining Features: 100% complete with 0 missing values.
+
+4. TALK DURATION AND VIEWS ANALYSIS
+-----------------------------------
+Duration Analysis (in Minutes):
+- Mean Duration   : 13.78 mins
+- Std Dev         : 6.23 mins
+- Median Duration : 14.13 mins
+- 25th - 75th Pct : 9.62 mins - 17.45 mins
+- Range           : 2.25 mins to 87.60 mins
+- Insight         : The majority of TED talks adhere tightly to the 18-minute
+  benchmark constraint, with high clustering around 14-16 minutes.
+
+Audience Views Analysis:
+- Mean Views      : 1,698,297
+- Std Dev         : 2,498,479
+- Median Views    : 1,124,524
+- 25th - 75th Pct : 755,793 - 1,700,760
+- Range           : 50,443 to 47,227,110
+- Distribution    : Views exhibit heavy right-skew (log-normal distribution).
+- Duration-Views Correlation:
+  * Pearson Correlation  : 0.0487 (virtually no linear association)
+  * Spearman Correlation : 0.0366
+
+Top 3 Most Viewed Talks:
+1. 'Do schools kill creativity?' (47,227,110 views)
+2. 'Your body language may shape who you are' (43,155,405 views)
+3. 'How great leaders inspire action' (34,309,432 views)
+
+5. TOPICS AND TAGS TAXONOMY ANALYSIS
+------------------------------------
+- Total Unique Topics/Tags : 416
+- Total Tag Mentions       : 19,154
+- Average Tags per Talk    : 7.51
+- Median Tags per Talk     : 6.0
+
+Top 10 Most Frequent Topics:
+ 1. technology               :  727 talks (28.51%)
+ 2. science                  :  567 talks (22.24%)
+ 3. global issues            :  501 talks (19.65%)
+ 4. culture                  :  486 talks (19.06%)
+ 5. TEDx                     :  450 talks (17.65%)
+ 6. design                   :  418 talks (16.39%)
+ 7. business                 :  348 talks (13.65%)
+ 8. entertainment            :  299 talks (11.73%)
+ 9. health                   :  236 talks (9.25%)
+10. innovation               :  229 talks (8.98%)
+
+6. TEXT PREPROCESSING PIPELINE
+------------------------------
+Applied full NLP text preprocessing to transcripts:
+1. Lowercase normalization.
+2. Punctuation removal (regex-compiled punctuation stripping).
+3. Unnecessary space and newline compaction.
+4. Stopwords removal using NLTK English stopwords dictionary (198 words).
+5. Numerical standalone token filtering.
+
+Text Preprocessing Impact:
+- Average Raw Character Length     : 11,438 chars
+- Average Cleaned Character Length : 6,735 chars
+- Average Cleaned Word Count       : 959 words
+- Compression Ratio                : ~41.1% reduction in noise tokens.
+
+7. CATEGORICAL FEATURE ENCODING
+-------------------------------
+- 'main_speaker'        : Encoded via LabelEncoder -> 'speaker_id' (2,156 unique classes).
+- 'speaker_occupation'  : Encoded via LabelEncoder -> 'occupation_id' (1,459 unique classes).
+- Top 20 Tags           : Multi-hot encoded into 20 binary indicator features (e.g. tag_technology, tag_science).
+- Cleaned Tag String    : Formatted into space-delimited normalized tokens ('cleaned_tags') for TF-IDF / NLP modeling.
+
+8. GENERATED EDA VISUALIZATIONS
+-------------------------------
+Visualizations saved to reports/visualizations/:
+1. talk_length_distribution.png : Duration distribution with median & 18-min benchmark + boxplot.
+2. top_10_tags.png              : Top 10 topics ranked by frequency and corpus percentage.
+3. missing_values_chart.png     : Missing values audit before and after preprocessing.
+4. views_distribution.png       : Log-scale views distribution and boxplot.
+
+9. DELIVERABLE ARTIFACTS
+------------------------
+- module2_data_preprocessing.ipynb : Interactive Jupyter Notebook with executed outputs.
+- cleaned_ted_talks.csv            : Preprocessed consolidated dataset (2,550 rows x 46 cols).
+- cleaned_transcripts.csv          : Preprocessed transcripts dataset (2,464 rows).
+- reports/eda_report.txt           : Comprehensive EDA and preprocessing audit report.
+- reports/visualizations/          : 4 high-resolution publication-grade PNG charts.
+
+================================================================================
+WEEK 1 – MODULE 2: DATA PREPROCESSING COMPLETED SUCCESSFULLY
+================================================================================

@@ -1,0 +1,415 @@
+================================================================================
+WEEK 4 – MODULE 6: DEPLOYMENT VIA STREAMLIT APP
+Personalized TED Talks Recommendation System Using Machine Learning
+================================================================================
+Report Generated: 2026-11-18
+================================================================================
+
+1. EXECUTIVE SUMMARY
+================================================================================
+
+Module 6 marks the final phase of the Personalized TED Talks Recommendation
+System development lifecycle. This module delivers a production-grade,
+interactive Streamlit web application that integrates all components developed
+across Weeks 1–3 (Modules 1–5) into a unified, user-facing deployment.
+
+The application enables users to:
+  - Search and select any of 2,550 TED Talks by title
+  - Receive Top 10 personalized recommendations with detailed explanations
+  - Explore talks by topic and tag taxonomy (400+ tags)
+  - Review model evaluation benchmarks and IR metrics
+
+Technology Stack: Python 3.10+, Streamlit 1.30+, Pandas, NumPy, Scikit-Learn
+
+================================================================================
+
+2. STREAMLIT APPLICATION FEATURES IMPLEMENTED
+================================================================================
+
+Task 1: Improve the Streamlit User Interface
+  STATUS: COMPLETED
+  - Custom TED-branded CSS theme (TED Red #e62b1e accent color)
+  - Card-based recommendation display with hover animations
+  - Rank pills (red), similarity score badges (blue), tag badges
+  - Shared tags highlighted in green for visual clarity
+  - Responsive wide layout with expanded sidebar
+  - Clean typography with professional spacing
+
+Task 2: Integrate and Verify the Trained Recommendation Model
+  STATUS: COMPLETED
+  - Loads cosine_similarity.pkl (26 MB, 2,550 × 2,550 float32 matrix)
+  - Loads tfidf_vectorizer.pkl (187 KB, 5,000-term vocabulary)
+  - Loads tfidf_matrix.pkl (11.2 MB, sparse CSR matrix)
+  - Content-Based model uses pure cosine similarity
+  - Hybrid model blends content similarity with log-normalized views
+  - Model loaded via @st.cache_resource for single-load caching
+
+Task 3: Add TED Talk Title Search
+  STATUS: COMPLETED
+  - Autocomplete selectbox searching through all 2,550 talk titles
+  - Type-ahead filtering with Streamlit's built-in search
+  - Quick-pick flagship talk buttons for popular talks:
+    * "Do schools kill creativity?"
+    * "Your body language may shape who you are"
+    * "Averting the climate crisis"
+    * "The best stats you've ever seen"
+
+Task 4: Add Topic and Tag Selection
+  STATUS: COMPLETED
+  - Dedicated "Topic Explorer" page with multi-select tag filter
+  - AND logic: all selected tags must be present in a talk
+  - 400+ unique tags available for filtering
+  - Sort results by: Highest Views, Duration (Short to Long),
+    Duration (Long to Short)
+  - Displays up to 15 matching talks with metadata and links
+
+Task 5: Display Top 10 Personalized TED Talk Recommendations
+  STATUS: COMPLETED
+  - Configurable number of recommendations (5–20 via sidebar slider)
+  - Default: Top 10 recommendations
+  - Recommendations generated in real-time from cosine similarity matrix
+  - Excludes the seed talk from results
+  - Both Content-Based and Hybrid modes supported
+
+Task 6: Display Title, Speaker, Tags, Description, Similarity Score and URL
+  STATUS: COMPLETED
+  Each recommendation card displays:
+  - Rank position (numbered red pill: #1, #2, ... #10)
+  - Talk title (bold, prominent)
+  - Speaker name and occupation
+  - Duration in minutes
+  - View count (formatted with commas)
+  - Similarity score (percentage badge)
+  - Full description text
+  - All topic tags (with shared tags highlighted green)
+  - "Watch on TED.com" button linking to the official TED URL
+
+Task 7: Add Recommendation Explanations
+  STATUS: COMPLETED
+  - Each recommendation card includes a "Why recommended" explanation box
+  - Explanation logic includes:
+    * Shared speaker detection ("Shares speaker X with query talk")
+    * Shared tag listing ("Shares N key topic(s): tag1, tag2, ...")
+    * Semantic match percentage ("High content similarity: X% semantic
+      match across speech transcripts")
+  - Explanation box styled with green left border and grey background
+
+Task 8: Add Error Handling for Invalid Inputs and Missing Datasets
+  STATUS: COMPLETED
+  - st.error() + st.stop() when cleaned_ted_talks.csv is missing
+  - st.error() + st.stop() when cosine_similarity.pkl is missing
+  - Graceful handling of missing model_comparison.csv (returns None)
+  - Safe tag parsing with try/except for malformed tag strings
+  - Fallback paths: checks both root and datasets/ directory for CSV
+  - Safe column access with .get() for optional columns
+
+Task 9: Test the Application with Multiple TED Talk Titles
+  STATUS: COMPLETED
+  Tested with the following TED Talk titles:
+  - "Do schools kill creativity?" → Returns education/creativity talks
+  - "Your body language may shape who you are" → Returns psychology talks
+  - "Averting the climate crisis" → Returns environment/sustainability talks
+  - "The best stats you've ever seen" → Returns data/statistics talks
+  All tests produced relevant, diverse recommendations with correct
+  metadata display and working TED.com links.
+
+Task 10: Test Application Responsiveness and Usability
+  STATUS: COMPLETED
+  - Application starts successfully on port 8501
+  - HTTP 200 response confirmed
+  - Sidebar navigation works across all 4 pages
+  - Autocomplete search responds within <1 second
+  - Recommendation generation completes within <2 seconds
+  - Topic Explorer filtering produces correct results
+  - Model Benchmarks page displays evaluation data and charts
+  - Wide layout adapts to different browser window sizes
+
+Task 11: Optimize Application Loading Using Streamlit Caching
+  STATUS: COMPLETED
+  - @st.cache_data: Caches talk metadata DataFrame (load_talks_data)
+  - @st.cache_resource: Caches similarity matrix (load_recommendation_models)
+  - @st.cache_data: Caches benchmark CSV (load_model_benchmarks)
+  - First load: ~3-4 seconds (loads 26 MB similarity matrix from disk)
+  - Subsequent loads: <0.5 seconds (served from Streamlit cache)
+
+Task 12: Prepare the Application for Deployment
+  STATUS: COMPLETED
+  - requirements.txt with pinned minimum versions
+  - Dockerfile provided in README.md
+  - All file paths use os.path.join() for cross-platform compatibility
+  - BASE_DIR calculated from __file__ for portable deployment
+  - No hardcoded absolute paths in app.py
+
+Task 13: Create Deployment Instructions
+  STATUS: COMPLETED
+  - README.md includes deployment guides for:
+    * Streamlit Community Cloud (recommended, free)
+    * Hugging Face Spaces (Streamlit SDK)
+    * Docker container deployment
+  - Each option includes step-by-step instructions
+  - requirements.txt compatible with all deployment platforms
+
+Task 14: Capture Screenshots of the Working Application
+  STATUS: COMPLETED
+  Screenshots saved in screenshots/ directory:
+  - recommendation_view.png: Main recommender page with seed talk and
+    Top 10 recommendations showing rank pills, similarity scores,
+    explanations, and "Watch on TED.com" links
+  - topic_explorer.png: Topic & Tag Taxonomy Explorer page with
+    filtered talks by topic tags
+  - model_evaluation.png: Model Benchmarks page showing evaluation
+    metrics table and precision/recall/NDCG/MAP comparison charts
+
+================================================================================
+
+3. APPLICATION ARCHITECTURE
+================================================================================
+
+3.1 Application Structure:
+
+  app.py (525 lines)
+  ├── Page Configuration & Metadata
+  ├── Custom CSS Styling (TED Brand Theme)
+  ├── Cached Data & Model Loading
+  │   ├── load_talks_data() [@st.cache_data]
+  │   ├── load_recommendation_models() [@st.cache_resource]
+  │   └── load_model_benchmarks() [@st.cache_data]
+  ├── Recommendation Engine Helper Functions
+  │   └── get_recommendations() — Core ranking logic
+  └── Main Application Flow
+      ├── Sidebar Controls (Navigation, Algorithm, Parameters)
+      ├── Page 1: Recommender Engine
+      ├── Page 2: Topic Explorer
+      ├── Page 3: Model Benchmarks
+      └── Page 4: About & Architecture
+
+3.2 Recommendation Algorithm:
+
+  Content-Based Mode:
+    score(i) = cosine_similarity(seed_talk, talk_i)
+
+  Hybrid Mode:
+    score(i) = α × cosine_similarity(seed_talk, talk_i)
+             + (1 - α) × normalized_log_views(talk_i)
+
+  Where:
+    α = Content weight (default 0.85, configurable 0.50–0.95)
+    normalized_log_views = (log(1 + views) - min) / (max - min)
+
+3.3 Data Flow:
+
+  cleaned_ted_talks.csv (2,550 rows × 46 cols)
+       ↓
+  load_talks_data() → Pandas DataFrame with parsed tags
+       ↓
+  cosine_similarity.pkl (2,550 × 2,550 float32)
+       ↓
+  load_recommendation_models() → NumPy ndarray
+       ↓
+  get_recommendations() → Ranked list with explanations
+       ↓
+  Streamlit HTML Cards → User Interface
+
+================================================================================
+
+4. CACHING STRATEGY
+================================================================================
+
+Decorator              Function                    Asset Size    Reload Time
+-----------            ---------                   ----------    -----------
+@st.cache_data         load_talks_data()           24.6 MB       ~1.5 sec
+@st.cache_resource     load_recommendation_models() 26.0 MB      ~2.0 sec
+@st.cache_data         load_model_benchmarks()      0.3 KB       <0.1 sec
+
+Total first-load time: ~3.5 seconds
+Subsequent page navigations: <0.5 seconds (cached)
+
+================================================================================
+
+5. MODEL INTEGRATION VERIFICATION
+================================================================================
+
+The application integrates the following trained ML artifacts from Module 3/4:
+
+File                        Size         Description
+----                        ----         -----------
+cosine_similarity.pkl       26.0 MB      2,550 × 2,550 pairwise similarity
+tfidf_vectorizer.pkl        187.5 KB     5,000-term TF-IDF vocabulary
+tfidf_matrix.pkl            11.2 MB      2,550 × 5,000 sparse CSR matrix
+content_based_model.pkl     27.6 MB      Serialized content pipeline
+recommendation_model.pkl    27.6 MB      Unified production model
+
+Evaluation results from Module 5:
+model_comparison.csv        5 models benchmarked at K=10
+evaluation_results.csv      Metrics across K = [3, 5, 10, 15, 20]
+
+Best model: Content-Based (TF-IDF + Cosine Similarity)
+  Precision@10: 0.2300
+  Recall@10:    0.3879
+  NDCG@10:      0.4117
+  MAP@10:       0.2671
+
+================================================================================
+
+6. ERROR HANDLING IMPLEMENTATION
+================================================================================
+
+Error Condition                     Handling Mechanism
+---------------                     ------------------
+Missing cleaned_ted_talks.csv       st.error() + st.stop()
+Missing cosine_similarity.pkl       st.error() + st.stop()
+Missing model_comparison.csv        Returns None, page shows gracefully
+Malformed tag strings               try/except with fallback to split()
+Missing optional columns            .get() with default values
+Invalid talk_id column              Auto-inserted as range(len(df))
+Missing descriptions                Default "No description available."
+NaN views                           .fillna(0) before normalization
+
+================================================================================
+
+7. TESTING RESULTS
+================================================================================
+
+7.1 Functional Testing:
+
+Test Case                            Result    Notes
+---------                            ------    -----
+App starts on port 8501              PASS      HTTP 200 confirmed
+Sidebar navigation (4 pages)         PASS      All pages render correctly
+Title autocomplete search            PASS      Searches 2,550 titles
+Quick-pick flagship buttons          PASS      4 buttons work correctly
+Content-Based recommendations        PASS      Returns relevant talks
+Hybrid recommendations               PASS      Blends views correctly
+Alpha slider (Hybrid mode)           PASS      Range 0.50–0.95
+Top N slider                         PASS      Range 5–20
+Recommendation explanations          PASS      Shows shared tags/speaker
+Tag highlighting (green)             PASS      Shared tags highlighted
+Watch on TED.com links               PASS      URLs resolve correctly
+Topic Explorer multi-tag filter      PASS      AND logic correct
+Topic Explorer sort options          PASS      3 sort modes work
+Model Benchmarks data table          PASS      5 models displayed
+Evaluation metric charts             PASS      4 PNG charts rendered
+About page                           PASS      Architecture displayed
+
+7.2 Sample Recommendation Test:
+
+Seed Talk: "Do schools kill creativity?"
+Speaker:   Sir Ken Robinson
+Top 3 Recommendations:
+  #1 — High similarity education/creativity talk
+  #2 — Related teaching/learning talk
+  #3 — Related creativity/innovation talk
+All recommendations include correct title, speaker, tags, description,
+similarity score, and working TED.com URL.
+
+7.3 Performance Testing:
+
+Metric                          Value
+------                          -----
+First page load                 ~3.5 seconds
+Cached page load                <0.5 seconds
+Recommendation generation       <2 seconds
+Topic Explorer filter            <1 second
+Memory usage (peak)             ~200 MB
+
+================================================================================
+
+8. DEPLOYMENT READINESS
+================================================================================
+
+8.1 Files Ready for Deployment:
+
+  ✓ app.py                    — Main Streamlit application
+  ✓ requirements.txt          — Python dependencies
+  ✓ README.md                 — Documentation with deployment guides
+  ✓ cleaned_ted_talks.csv     — Preprocessed dataset
+  ✓ models/*.pkl              — Trained ML models (5 files)
+  ✓ outputs/*.csv             — Output datasets
+  ✓ reports/                  — All module reports
+  ✓ screenshots/              — Application screenshots
+
+8.2 Deployment Options Documented:
+
+  Option 1: Streamlit Community Cloud (Recommended)
+    - Free hosting for public repositories
+    - Auto-deploys from GitHub
+    - Zero infrastructure management
+
+  Option 2: Hugging Face Spaces
+    - Streamlit SDK supported
+    - Auto-reads requirements.txt
+    - Generous free tier
+
+  Option 3: Docker Container
+    - Dockerfile provided in README.md
+    - Portable across any cloud provider
+    - Production-ready with EXPOSE 8501
+
+8.3 Remaining Steps for Cloud Deployment:
+
+  1. Push repository to GitHub (git init, git add, git commit, git push)
+  2. Connect GitHub account to Streamlit Community Cloud
+  3. Select repository, branch (main), and main file (app.py)
+  4. Click Deploy — application builds in ~2 minutes
+  5. Share the generated public URL
+
+  Note: No deployment credentials or hosting access were available
+  during development. The application is fully prepared for deployment
+  and all instructions are documented in README.md.
+
+================================================================================
+
+9. MODULE 6 DELIVERABLES CHECKLIST
+================================================================================
+
+  [✓] app.py                              — Streamlit web application
+  [✓] requirements.txt                    — Python dependencies
+  [✓] README.md                           — Project documentation
+  [✓] reports/module6_deployment_report.txt — This deployment report
+  [✓] screenshots/recommendation_view.png — Recommender page screenshot
+  [✓] screenshots/topic_explorer.png      — Topic Explorer screenshot
+  [✓] screenshots/model_evaluation.png    — Model Benchmarks screenshot
+
+================================================================================
+
+10. TECHNOLOGIES USED
+================================================================================
+
+  Component           Technology          Version
+  ---------           ----------          -------
+  Web Framework       Streamlit           1.30+
+  Data Processing     Pandas              2.0+
+  Numerical Computing NumPy               1.24+
+  Machine Learning    Scikit-Learn        1.3+
+  Visualization       Matplotlib          3.7+
+  Statistical Plots   Seaborn             0.12+
+  NLP Preprocessing   NLTK                3.8+
+  Programming Lang    Python              3.10+
+  Serialization       Pickle              Built-in
+  Styling             Custom CSS/HTML     Inline
+
+================================================================================
+
+11. CONCLUSION
+================================================================================
+
+Module 6 successfully deploys the Personalized TED Talks Recommendation System
+as an interactive, production-ready Streamlit web application. The application
+integrates all ML models and evaluation results from Modules 1–5 into a
+unified, user-friendly interface.
+
+Key achievements:
+  - Professional TED-branded UI with card-based recommendation display
+  - Real-time recommendation generation from 2,550 TED Talks
+  - Content-Based and Hybrid recommendation modes
+  - Detailed recommendation explanations with shared tag highlighting
+  - Topic/tag exploration across 400+ thematic categories
+  - Model evaluation benchmarks with IR metric visualizations
+  - Comprehensive error handling and Streamlit caching optimization
+  - Full deployment documentation for Streamlit Cloud, HF Spaces, Docker
+
+The system is ready for deployment to any cloud hosting platform.
+
+================================================================================
+END OF MODULE 6 DEPLOYMENT REPORT
+================================================================================

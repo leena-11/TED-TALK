@@ -1,0 +1,153 @@
+================================================================================
+           PERSONALIZED TED TALKS RECOMMENDATION SYSTEM USING ML
+                  WEEK 1 - MODULE 1: DATA COLLECTION REPORT
+================================================================================
+Generated Timestamp : 2026-11-17 18:54:31
+Pipeline Script     : module1_data_collection.py
+Status              : COMPLETED & VERIFIED
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+This report documents the execution and completion of Week 1 - Module 1: Data
+Collection for the Personalized TED Talks Recommendation System. In this phase,
+the raw TED Talks datasets ('ted_main.csv' and 'transcripts.csv') were identified,
+validated, deduplicated, and integrated into a standardized collection. All
+primary metadata features (titles, speaker names, tags, descriptions, URLs) and
+full verbatim transcripts were organized. Topic diversity was quantitatively
+verified across 400+ distinct domains. Furthermore, rating structures and watch-
+history availability were formally evaluated, confirming real-world constraints
+without generating artificial or fake user records.
+
+2. DATASET SOURCES AND ORIGINS
+------------------------------
+Source Name        : Kaggle TED Talks Dataset (ted-talks)
+Original Publisher : TED Conferences LLC (scraped via official ted.com portal)
+Curator / Source   : Rounak Banik (Kaggle)
+Collection Window  : Talks published on TED.com up to September 21, 2017
+License            : Creative Commons Attribution - NonCommercial - NoDerivatives 4.0 International
+Input Files Used   :
+  - ted_main.csv (Primary metadata including titles, speakers, tags, ratings, views, comments, URLs)
+  - transcripts.csv (Full conversational transcripts for all available talks, linked by talk URL)
+
+3. DATASET COLLECTION AND RECORD COUNTS
+---------------------------------------
+Total TED Talks Collected      : 2,550
+Talks with Transcripts         : 2,464 (96.63%)
+Talks without Transcripts      : 86 (3.37%)
+Duplicate Resolution Summary   :
+  - 'ted_main.csv' contained 0 duplicate URLs across 2,550 talks.
+  - 'transcripts.csv' contained 3 redundant duplicate URL entries which were
+    safely deduplicated, preserving full 1-to-1 referential integrity on 'url'.
+
+4. REQUIRED FEATURE VERIFICATION
+---------------------------------
+The project specifications require talk titles, speaker names, tags,
+descriptions, URLs, and transcripts wherever available:
+
+Feature Label                    Column           Available    Missing    Coverage  
+-------------------------------- ---------------- ------------ ---------- ----------
+Talk Titles                      title            2550         0          100.00%   
+Speaker Names                    main_speaker     2550         0          100.00%   
+Tags / Topics                    tags             2550         0          100.00%   
+Descriptions                     description      2550         0          100.00%   
+Talk URLs                        url              2550         0          100.00%   
+Transcripts (wherever available) transcript       2464         86         96.63%    
+
+Summary:
+  - Talk titles, speaker names, tags, descriptions, and URLs have 100.00% coverage.
+  - Transcripts have 96.63% coverage (2464/2550).
+  - Talks missing transcripts correspond primarily to musical performances, live
+    magic acts, or visual art demonstrations where spoken transcripts do not exist.
+
+5. TOPIC DIVERSITY ANALYSIS
+---------------------------
+Total Unique Topics/Tags Identified : 416
+Total Tag Mentions across Corpus   : 19,154
+Average Topics/Tags per Talk        : 7.51
+
+Top 20 Most Frequent Topics:
+Rank   Topic Name                   Talk Count     Corpus Percentage 
+------ ---------------------------- -------------- ------------------
+1      technology                   727            28.51%
+2      science                      567            22.24%
+3      global issues                501            19.65%
+4      culture                      486            19.06%
+5      TEDx                         450            17.65%
+6      design                       418            16.39%
+7      business                     348            13.65%
+8      entertainment                299            11.73%
+9      health                       236            9.25%
+10     innovation                   229            8.98%
+11     society                      224            8.78%
+12     art                          221            8.67%
+13     social change                218            8.55%
+14     future                       195            7.65%
+15     communication                191            7.49%
+16     creativity                   189            7.41%
+17     biology                      189            7.41%
+18     humanity                     182            7.14%
+19     collaboration                174            6.82%
+20     environment                  165            6.47%
+
+Diversity Assessment:
+The corpus exhibits high topic diversity across STEM, arts, global policy,
+medicine, business, and humanity. Topics span both hard sciences ('technology',
+'science', 'neuroscience') and humanities ('culture', 'art', 'philosophy',
+'social change'), providing an ideal foundation for personalized recommendation
+algorithms (e.g., Content-Based Filtering with TF-IDF, CountVectorizer, and
+embedding-based semantic similarities).
+
+6. RATINGS AND WATCH-HISTORY ASSESSMENT (INTEGRITY CHECK)
+---------------------------------------------------------
+Requirement 7 Check: 'Check whether ratings and watch-history data are available.
+                      Do not generate fake user data.'
+
+A. Rating Data Findings:
+  - Presence of 'ratings' column: YES
+  - Nature of 'ratings' Data    : Aggregate community-level emotion/descriptor votes.
+    Each talk possesses counts across 14 qualitative descriptors assigned by viewers:
+    Sample descriptors: Funny, Beautiful, Ingenious, Courageous, Longwinded, Confusing, Informative, Fascinating...
+  - Individual User-Item Ratings: NOT AVAILABLE in the dataset.
+    The dataset does not contain individual user profiles (user_id, talk_id, rating_score).
+
+B. Watch-History Data Findings:
+  - User IDs / Profile Identifiers : NONE found (0 matching columns)
+  - Individual Viewing Logs/History: NONE found (0 matching columns)
+  - Available Engagement Metrics   : Aggregate 'views' (view count) and 'comments' (comment count).
+
+C. Synthetic Data Integrity Policy:
+  - In strict compliance with guidelines, NO FAKE OR SYNTHETIC USER DATA WAS GENERATED.
+  - Justification: Fabricating fake users or synthetic rating matrices introduces artificial
+    bias and invalidates real-world machine learning recommendation benchmarks.
+  - Recommended Solution for Later Modules: Content-Based Filtering utilizing rich textual
+    metadata (transcripts, tags, descriptions, titles, speakers) combined with popularity
+    weighting (views, rating descriptor profiles).
+
+7. ORGANIZED DATASETS MANIFEST
+------------------------------
+Target Datasets Directory: E:\infosys\TED TALKS\datasets
+
+Files Organized and Stored:
+  1. datasets/ted_main.csv
+     - Primary metadata for 2,550 TED talks.
+  2. datasets/transcripts.csv
+     - Verbatim transcript text for 2,467 talks.
+  3. datasets/ted_talks_collected.csv
+     - Unified and consolidated dataset produced by Module 1.
+     - File Size: 34.22 MB
+     - Total Records: 2,550 rows x 18 columns
+
+8. MODULE 1 COMPLETION SIGN-OFF
+--------------------------------
+All requirements for WEEK 1 - MODULE 1: DATA COLLECTION have been satisfied:
+  [x] Collect and organize TED Talks dataset information.
+  [x] Use existing ted_main.csv and transcripts.csv.
+  [x] Include titles, speaker names, tags, descriptions, URLs, and transcripts.
+  [x] Document dataset sources and origins.
+  [x] Check and report the number of TED Talks collected (2,550 talks).
+  [x] Ensure and quantify topic diversity across 416 unique topics.
+  [x] Verify ratings and watch-history data without generating fake user data.
+  [x] Save organized datasets in 'datasets/'.
+  [x] Generate detailed data collection report in 'reports/data_collection_report.txt'.
+================================================================================

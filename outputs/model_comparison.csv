@@ -1,0 +1,6 @@
+Model,K,Precision@K,Recall@K,NDCG@K,MAP@K
+Content-Based (TF-IDF),10,0.23,0.3879,0.4117,0.2671
+Hybrid (alpha=0.85),10,0.1733,0.2931,0.3075,0.1885
+Tag Jaccard Baseline,10,0.0988,0.1693,0.1628,0.0837
+Hybrid (alpha=0.70),10,0.0537,0.0928,0.0913,0.0467
+Popularity Baseline,10,0.0035,0.0062,0.0068,0.0032

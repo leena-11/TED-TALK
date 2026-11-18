@@ -1,0 +1,156 @@
+================================================================================
+           PERSONALIZED TED TALKS RECOMMENDATION SYSTEM USING ML
+     WEEK 2 - MODULE 3: FEATURE ENGINEERING AND VECTORIZATION REPORT
+================================================================================
+Generated Timestamp : 2026-11-17 19:34:31
+Module              : Week 2 – Module 3: Feature Engineering and Vectorization
+Status              : COMPLETED & VERIFIED
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+Module 3 implements high-dimensional feature engineering and mathematical
+vectorization for the Personalized TED Talks Recommendation System. Using
+the cleaned corpus of 2,550 TED Talks from Module 2, natural language features
+were synthesized across talk titles, speaker names, weighted curated tags,
+descriptions, and sanitized transcripts. Term Frequency–Inverse Document
+Frequency (TF-IDF) vectorization transformed text documents into a 5,000-dimensional
+feature space. Pairwise Cosine Similarity was computed across all 6.5 million talk
+pairs, providing the mathematical engine for semantic content recommendations.
+
+2. FEATURE EXTRACTION AND ENGINEERING
+-------------------------------------
+Input Datasets:
+- 'cleaned_ted_talks.csv'    : 2,550 talks × 46 features.
+- 'cleaned_transcripts.csv'  : 2,464 deduplicated transcripts.
+
+Multi-Field Feature Synthesis:
+- 'combined_content' Feature:
+  Constructed by combining Title + Main Speaker + (2 × Cleaned Tags) +
+  Description + Cleaned Transcript.
+- Weighting Strategy:
+  Tags receive a 2x multiplier because human-curated tags possess superior
+  categorical signal compared to spontaneous conversational words.
+- Lexical Metrics Extracted:
+  * Mean Cleaned Words per Talk : 927.7 words
+  * Mean Unique Words per Talk  : 488.9 words
+  * Mean Lexical Density Ratio  : 0.5674
+
+3. TF-IDF VECTORIZATION PARAMETER CONFIGURATION
+-----------------------------------------------
+The TfidfVectorizer was configured with carefully tuned hyperparameters:
+- 'max_features = 5000'
+  * Rationale: Retains the top 5,000 most statistically significant n-grams,
+    striking the optimal balance between semantic coverage and computational efficiency.
+- 'stop_words = english'
+  * Rationale: Removes residual common grammatical English stopwords.
+- 'ngram_range = (1, 2)'
+  * Rationale: Extracts unigrams ('creativity', 'education') and informative
+    bigrams ('climate change', 'machine learning', 'body language', 'mental health').
+- 'min_df = 2'
+  * Rationale: Ignores terms appearing in fewer than 2 talks to eliminate typos/noise.
+- 'sublinear_tf = True'
+  * Rationale: Applies logarithmic term frequency scaling (1 + log(tf)) to
+    dampen the impact of word repetitions in long speeches.
+
+Vectorization Output:
+- Vocabulary Size      : 5,000 n-gram features
+- Matrix Dimensions    : 2,550 talks × 5,000 terms
+- Total Non-Zero Terms : 935,408
+- Matrix Sparsity      : 92.66% (sparse CSR representation)
+- Mean Active Terms    : 366.8 terms per talk
+
+4. PAIRWISE COSINE SIMILARITY ANALYSIS
+--------------------------------------
+Cosine Similarity Formulation:
+  cos_sim(u, v) = (u · v) / (||u||_2 * ||v||_2)
+Because TF-IDF vectors are L2-normalized, similarity equals the dot product.
+
+Matrix Statistics:
+- Dimensions           : 2,550 × 2,550
+- Total Pairwise Pairs : 3,249,975 off-diagonal combinations
+- Memory Utilization   : 24.81 MB
+- Mean Similarity      : 0.1012
+- Median Similarity    : 0.1018
+- Standard Deviation   : 0.0426
+- Maximum Off-Diagonal : 0.7426
+- Minimum Similarity   : 0.0000
+
+Top Similar Talk Demonstrations:
+1. Target Talk [0]: 'Do schools kill creativity?' by Ken Robinson
+   - Rank 1 (0.5473): 'Bring on the learning revolution!' by Ken Robinson
+   - Rank 2 (0.4287): 'How to escape education's death valley' by Ken Robinson
+   - Rank 3 (0.3341): 'Building a school in the cloud' by Sugata Mitra
+   - Rank 4 (0.3328): 'How to learn? From mistakes' by Diana Laufenberg
+   - Rank 5 (0.3297): 'Kids, take charge of your learning' by Kiran Sethi
+
+2. Target Talk [1346]: 'Your body language may shape who you are' by Amy Cuddy
+   - Rank 1 (0.3012): 'How to spot a liar' by Pamela Meyer
+   - Rank 2 (0.2872): 'The power of vulnerability' by Brené Brown
+   - Rank 3 (0.2458): 'Connected, but alone?' by Sherry Turkle
+   - Rank 4 (0.2396): 'The secret to desire in a long-term relationship' by Esther Perel
+   - Rank 5 (0.2312): 'How we read each other's minds' by Rebecca Saxe
+
+3. Target Talk [1]: 'Averting the climate crisis' by Al Gore
+   - Rank 1 (0.4633): 'New thinking on the climate crisis' by Al Gore
+   - Rank 2 (0.3704): 'The case for optimism on climate change' by Al Gore
+   - Rank 3 (0.3541): 'What's the worst that could happen?' by Greg Craven
+   - Rank 4 (0.3475): 'Climate change is happening. Here's how we adapt' by Alice Bows-Larkin
+   - Rank 5 (0.3289): 'Global warming's deliciously absurd green shoe' by Stephen Petranek
+
+5. USER-ITEM INTERACTION MATRIX AUDIT
+-------------------------------------
+Requirement 9 Check:
+  "Create a user-item interaction matrix only if genuine user interaction data
+   is available. Do not generate fake interaction data."
+
+Audit Findings:
+- Individual User Profiles / IDs : 0 found (No user_id, viewer_id, or login accounts).
+- Per-User Rating Logs           : 0 found (Only aggregate community descriptor tallies).
+- Streaming / Watch Logs         : 0 found (Only aggregate views count).
+- Synthetic Data Policy Compliance:
+  STRICT COMPLIANCE CONFIRMED. NO FAKE OR SYNTHETIC USER DATA WAS GENERATED.
+- Academic & Engineering Rationale:
+  Synthesizing random user ratings introduces uncalibrated bias and hallucinates
+  artificial collaborative filtering scores. The system correctly relies on
+  ground-truth content-based vector representations.
+
+6. SERIALIZED MODELS AND DELIVERABLES
+-------------------------------------
+Model Artifacts (in models/):
+1. models/tfidf_vectorizer.pkl (183.1 KB)
+   - Trained Scikit-Learn TfidfVectorizer with 5,000 vocabulary features.
+2. models/tfidf_matrix.pkl (10.71 MB)
+   - Pre-computed sparse Scipy CSR TF-IDF feature matrix (2,550 × 5,000).
+3. models/cosine_similarity.pkl (24.81 MB)
+   - Pre-computed float32 pairwise similarity matrix (2,550 × 2,550).
+
+Output Datasets (in outputs/):
+1. outputs/talk_features.csv (0.72 MB)
+   - 2,550 rows × 12 columns with talk_id, titles, speakers, duration, views,
+     dominant TF-IDF keywords, and metadata.
+2. outputs/similarity_matrix.csv (43.41 MB)
+   - Full 2,550 × 2,550 numerical similarity matrix formatted to 4 decimals.
+
+Visualizations (in reports/visualizations/):
+1. similarity_distribution.png     : Pairwise similarity score distribution and boxplot.
+2. similarity_heatmap.png          : Cosine similarity heatmap across 10 diverse talks.
+3. top_tfidf_features.png          : Top 20 most informative TF-IDF keywords.
+4. feature_sparsity_distribution.png: Distribution of non-zero active terms per talk.
+
+7. VERIFICATION CHECKLIST
+-------------------------
+- [x] Load cleaned datasets (cleaned_ted_talks.csv and cleaned_transcripts.csv).
+- [x] Extract text features from transcripts.
+- [x] Extract and combine TED Talk tags, descriptions, titles, and speakers.
+- [x] Apply TF-IDF vectorization with tuned hyperparameters.
+- [x] Generate numerical feature vectors (2,550 × 5,000).
+- [x] Calculate pairwise Cosine Similarity (2,550 × 2,550).
+- [x] Generate similarity scores and demonstrate matching for sample talks.
+- [x] Audit user-item interaction data (strict NO FAKE USER DATA policy).
+- [x] Save trained models in models/.
+- [x] Visualize similarity scores and feature distributions.
+- [x] Document techniques and parameter settings in reports/module3_report.txt.
+================================================================================
+WEEK 2 – MODULE 3: FEATURE ENGINEERING AND VECTORIZATION COMPLETE
+================================================================================

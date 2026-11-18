@@ -1,0 +1,26 @@
+Model,K,Precision@K,Recall@K,NDCG@K,MAP@K
+Content-Based (TF-IDF),3,0.417,0.2095,0.4566,0.3704
+Content-Based (TF-IDF),5,0.3451,0.2918,0.3978,0.2762
+Content-Based (TF-IDF),10,0.23,0.3879,0.4117,0.2671
+Content-Based (TF-IDF),15,0.1771,0.448,0.4405,0.2823
+Content-Based (TF-IDF),20,0.1467,0.4944,0.4604,0.2913
+Hybrid (alpha=0.85),3,0.3085,0.1556,0.3364,0.2653
+Hybrid (alpha=0.85),5,0.2537,0.2154,0.2928,0.194
+Hybrid (alpha=0.85),10,0.1733,0.2931,0.3075,0.1885
+Hybrid (alpha=0.85),15,0.1399,0.3549,0.337,0.202
+Hybrid (alpha=0.85),20,0.1171,0.3967,0.3548,0.2087
+Hybrid (alpha=0.70),3,0.0778,0.0415,0.0893,0.0644
+Hybrid (alpha=0.70),5,0.0655,0.0572,0.0786,0.0465
+Hybrid (alpha=0.70),10,0.0537,0.0928,0.0913,0.0467
+Hybrid (alpha=0.70),15,0.0478,0.1232,0.1059,0.0506
+Hybrid (alpha=0.70),20,0.0428,0.1464,0.1158,0.0533
+Tag Jaccard Baseline,3,0.149,0.0758,0.1593,0.112
+Tag Jaccard Baseline,5,0.131,0.1121,0.1451,0.0836
+Tag Jaccard Baseline,10,0.0988,0.1693,0.1628,0.0837
+Tag Jaccard Baseline,15,0.0831,0.2144,0.184,0.0916
+Tag Jaccard Baseline,20,0.0738,0.2529,0.2005,0.0965
+Popularity Baseline,3,0.0059,0.0033,0.0071,0.0048
+Popularity Baseline,5,0.0047,0.0042,0.0063,0.0034
+Popularity Baseline,10,0.0035,0.0062,0.0068,0.0032
+Popularity Baseline,15,0.0026,0.0069,0.0071,0.0033
+Popularity Baseline,20,0.0037,0.0127,0.0096,0.0036

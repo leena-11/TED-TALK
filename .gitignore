@@ -1,0 +1,35 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Local NLP Data downloads
+nltk_data/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# Environment variables & secrets
+.env
+.env.*
+secrets.toml
+
+# Streamlit temporary / cache files
+.streamlit/secrets.toml
